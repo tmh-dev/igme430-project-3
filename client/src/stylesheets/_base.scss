@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|Lato');
+$primary-font-stack: 'Josefin Sans', sans-serif;
+$secondary-font-stack: 'Lato', sans-serif;
+
+body {
+    font-family: $secondary-font-stack;
+    .navbar-brand, h1, h2, h3, h4, label {
+        font-family: $primary-font-stack;
+    }
+
+    .container {
+        padding-top: 2em;
+    }
+}
