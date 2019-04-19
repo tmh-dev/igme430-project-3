@@ -1,6 +1,5 @@
 const graphql = require('graphql');
-const BoardType = require('./Board');
-const Board = require('../../models');
+const Board = require('../models');
 
 const {
   GraphQLObjectType,
@@ -15,12 +14,14 @@ const StoryType = new GraphQLObjectType({
     title: { type: GraphQLString },
     description: { type: GraphQLString },
     board: {
-      type: BoardType,
+      type: require('./Board'),
       resolve(parent, args) {
+        console.log(args);
         // return _.find(boards, { id: parent.boardId })
         return Board.findById(parent.boardId);
       },
     },
+
   }),
 });
 

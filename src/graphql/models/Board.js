@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Story = require('./Story');
 
 const { Schema } = mongoose;
 
@@ -7,6 +8,8 @@ const BoardSchema = new Schema({
     type: String,
     required: true,
   },
+
+  stories: [Story.StorySchema],
 
   ownerId: {
     type: String,

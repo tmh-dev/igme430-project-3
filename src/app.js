@@ -7,7 +7,7 @@ const compression = require('compression');
 const mongoose = require('mongoose');
 // const graphql = require('graphql');
 const graphqlHTTP = require('express-graphql');
-const schema = require('./graphql');
+const schema = require('./graphql/index');
 
 // import required files
 const router = require('./router');

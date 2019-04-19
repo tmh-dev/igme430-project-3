@@ -57,6 +57,6 @@ BoardSchema.statics.deleteById = (ownerId, boardId, callback) => {
   return BoardModel.deleteOne(query, callback);
 };
 
-BoardModel = mongoose.model('Board', BoardSchema);
+BoardModel = mongoose.model('BoardNew', BoardSchema);
 
 module.exports = BoardModel;

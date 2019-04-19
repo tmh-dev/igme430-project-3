@@ -1,12 +1,12 @@
 const graphql = require('graphql');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const models = require('./models');
 const types = require('./types');
 
-const { Story, Board, User } = models;
-const { StoryType, BoardType, UserType } = types;
+const { Story, Board } = models;
+const { StoryType, BoardType } = types;
 
-const secret = 'mysecretshhhh';
+// const secret = 'mysecretshhhh';
 
 const {
   GraphQLObjectType,
@@ -50,91 +50,91 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    signup: {
-      type: UserType,
-      args: {
-        email: { type: GraphQLNonNull(GraphQLString) },
-        password1: { type: GraphQLNonNull(GraphQLString) },
-        password2: { type: GraphQLNonNull(GraphQLString) },
-      },
-      resolve(parent, args) {
-        if (args.password1.trim() !== args.password2.trim()) {
-          return {
-            error: 'Passwords do not match.',
-          };
-        }
+    // signup: {
+    //   type: UserType,
+    //   args: {
+    //     email: { type: GraphQLNonNull(GraphQLString) },
+    //     password1: { type: GraphQLNonNull(GraphQLString) },
+    //     password2: { type: GraphQLNonNull(GraphQLString) },
+    //   },
+    //   resolve(parent, args) {
+    //     if (args.password1.trim() !== args.password2.trim()) {
+    //       return {
+    //         error: 'Passwords do not match.',
+    //       };
+    //     }
 
-        return User.generateHash(args.password1, (salt, hash) => {
-          const user = new User({
-            email: args.email,
-            salt,
-            password: hash,
-          });
+    //     return User.generateHash(args.password1, (salt, hash) => {
+    //       const user = new User({
+    //         email: args.email,
+    //         salt,
+    //         password: hash,
+    //       });
 
-          try {
-            user.save();
+    //       try {
+    //         user.save();
 
-            const payload = User.toAPI(user);
-            const token = jwt.sign(payload, secret, {
-              expiresIn: '2h',
-            });
+    //         const payload = User.toAPI(user);
+    //         const token = jwt.sign(payload, secret, {
+    //           expiresIn: '2h',
+    //         });
 
-            return {
-              success: true,
-              message: 'Authentication Successful',
-              token,
-            };
-          } catch (err) {
-            if (err.code === 11000) {
-              return {
-                error: 'Email already in use.',
-              };
-            }
-          }
+    //         return {
+    //           success: true,
+    //           message: 'Authentication Successful',
+    //           token,
+    //         };
+    //       } catch (err) {
+    //         if (err.code === 11000) {
+    //           return {
+    //             error: 'Email already in use.',
+    //           };
+    //         }
+    //       }
 
-          return {
-            error: 'An error occurred',
-          };
-        });
-      },
-    },
-    login: {
-      type: UserType,
-      args: {
-        email: { type: GraphQLNonNull(GraphQLString) },
-        password: { type: GraphQLNonNull(GraphQLString) },
-      },
-      resolve(parent, args) {
-        return User.Authenticate(args.email, args.password, (err, user) => {
-          if (err || !user) {
-            return {
-              error: 'Invalid username or password',
-            };
-          }
+    //       return {
+    //         error: 'An error occurred',
+    //       };
+    //     });
+    //   },
+    // },
+    // login: {
+    //   type: UserType,
+    //   args: {
+    //     email: { type: GraphQLNonNull(GraphQLString) },
+    //     password: { type: GraphQLNonNull(GraphQLString) },
+    //   },
+    //   resolve(parent, args) {
+    //     return User.Authenticate(args.email, args.password, (err, user) => {
+    //       if (err || !user) {
+    //         return {
+    //           error: 'Invalid username or password',
+    //         };
+    //       }
 
-          const payload = User.toAPI(user);
-          const token = jwt.sign(payload, secret, {
-            expiresIn: '2h',
-          });
+    //       const payload = User.toAPI(user);
+    //       const token = jwt.sign(payload, secret, {
+    //         expiresIn: '2h',
+    //       });
 
-          return {
-            success: true,
-            message: 'Authentication Successful',
-            token,
-          };
-        });
-      },
-    },
+    //       return {
+    //         success: true,
+    //         message: 'Authentication Successful',
+    //         token,
+    //       };
+    //     });
+    //   },
+    // },
     addBoard: {
       type: BoardType,
       args: {
         title: { type: GraphQLNonNull(GraphQLString) },
-        ownerId: { type: GraphQLNonNull(GraphQLID) },
+        // ownerId: { type: GraphQLNonNull(GraphQLID) },
       },
       resolve(parent, args) {
         const board = new Board({
           title: args.title,
-          ownerId: args.ownerId,
+          // ownerId: args.ownerId,
         });
 
         return board.save();

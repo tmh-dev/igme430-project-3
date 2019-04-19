@@ -1,5 +1,4 @@
 const graphql = require('graphql');
-const StoryType = require('./Story');
 const Story = require('../models');
 
 const {
@@ -15,8 +14,9 @@ const BoardType = new GraphQLObjectType({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
     stories: {
-      type: new GraphQLList(StoryType),
+      type: new GraphQLList(require('./Story')),
       resolve(parent, args) {
+        console.log(args);
         return Story.find({ boardId: parent.id });
       },
     },

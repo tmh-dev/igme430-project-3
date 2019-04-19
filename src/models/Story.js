@@ -60,7 +60,7 @@ StorySchema.statics.deleteByTitle = (ownerId, title, callback) => {
   return StoryModel.deleteOne(query, callback);
 };
 
-StoryModel = mongoose.model('Story', StorySchema);
+StoryModel = mongoose.model('StoryNew', StorySchema);
 
 module.exports = {
   StoryModel,

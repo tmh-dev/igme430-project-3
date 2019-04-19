@@ -26,14 +26,14 @@ const requiresToken = (req, res, next) => {
         });
       }
       req.decoded = decoded;
-      next();
-    });
-  } else {
-    return res.json({
-      success: false,
-      message: 'Auth token is not supplied.',
+      return next();
     });
   }
+
+  return res.json({
+    success: false,
+    message: 'Auth token is not supplied.',
+  });
 };
 
 const requiresLogout = (req, res, next) => {

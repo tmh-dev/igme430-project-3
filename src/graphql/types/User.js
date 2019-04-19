@@ -17,7 +17,8 @@ const UserType = new GraphQLObjectType({
     boards: {
       type: new GraphQLList(BoardType),
       resolve(parent, args) {
-
+        console.log(args);
+        console.log(parent);
       },
     },
   }),

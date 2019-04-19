@@ -24,12 +24,15 @@ const StorySchema = new Schema({
     required: true,
   },
 
-  createdDate: {
-    type: Date,
-    default: Date.now,
-  },
+  // createdDate: {
+  //   type: Date,
+  //   default: Date.now,
+  // },
 });
 
 const StoryModel = mongoose.model('Story', StorySchema);
 
-module.exports = StoryModel;
+module.exports = {
+  StoryModel,
+  StorySchema,
+};

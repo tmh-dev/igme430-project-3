@@ -4,6 +4,7 @@
       "no-underscore-dangle" : "off",
       "no-plusplus": "off",
       "prefer-destructuring": "off",
-      "max-len": "off"
+      "max-len": "off",
+      "global-require": "off"
     }
 }
