@@ -5,6 +5,6 @@ export const PublicOnlyRoute = ({ component: Component, ...rest }: any) => (
     <Route {...rest} render={props => (
         !localStorage.getItem('user')
             ? <Component {...props} />
-            : <Redirect to={{ pathname: '/storyboard', state: { from: props.location } }} />
+            : <Redirect to={{ pathname: '/home', state: { from: props.location } }} />
     )} />
 )

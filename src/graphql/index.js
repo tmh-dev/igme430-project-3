@@ -41,7 +41,7 @@ const RootQuery = new GraphQLObjectType({
       args: { ownerId: { type: GraphQLID } },
       resolve(parent, args) {
         // return _.filter(boards, userId)
-        return Board.find({ ownerId: args.id });
+        return Board.find({ ownerId: args.ownerId });
       },
     },
   }),
@@ -129,12 +129,12 @@ const Mutation = new GraphQLObjectType({
       type: BoardType,
       args: {
         title: { type: GraphQLNonNull(GraphQLString) },
-        // ownerId: { type: GraphQLNonNull(GraphQLID) },
+        ownerId: { type: GraphQLNonNull(GraphQLID) },
       },
       resolve(parent, args) {
         const board = new Board({
           title: args.title,
-          // ownerId: args.ownerId,
+          ownerId: args.ownerId,
         });
 
         return board.save();
@@ -157,6 +157,42 @@ const Mutation = new GraphQLObjectType({
         });
 
         return story.save();
+      },
+    },
+    updateStory: {
+      type: StoryType,
+      args: {
+        title: { type: GraphQLString },
+        status: { type: GraphQLString },
+        description: { type: GraphQLString },
+        id: { type: GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        const update = {};
+        if (args.title) update.title = args.title;
+        if (args.status) update.status = args.status;
+        if (args.description) update.description = args.description;
+        console.dir(update.description);
+
+        return Story.findByIdAndUpdate(args.id, update, { new: true });
+      },
+    },
+    deleteBoard: {
+      type: BoardType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        return Board.findByIdAndDelete(args.id);
+      },
+    },
+    deleteStory: {
+      type: StoryType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        return Story.findByIdAndDelete(args.id);
       },
     },
   },

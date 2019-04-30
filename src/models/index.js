@@ -1,9 +1,5 @@
-const Board = require('./Board');
-const Story = require('./Story');
-const User = require('./Account');
+const Account = require('./Account');
 
 module.exports = {
-  Board,
-  Story,
-  User,
+  Account,
 };

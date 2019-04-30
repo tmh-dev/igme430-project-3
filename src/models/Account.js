@@ -55,12 +55,8 @@ AccountSchema.statics.findByEmail = (email, callback) => {
   return AccountModel.findOne(search, callback);
 };
 
-AccountSchema.statics.changePassword = (email, update, callback) => {
-  const query = {
-    email,
-  };
-
-  AccountModel.findOneAndUpdate(query, update, callback);
+AccountSchema.statics.changePassword = (id, update, callback) => {
+  AccountModel.findByIdAndUpdate(id, update, callback);
 };
 
 AccountSchema.statics.generateHash = (password, callback) => {

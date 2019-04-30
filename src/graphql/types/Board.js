@@ -1,5 +1,7 @@
 const graphql = require('graphql');
-const Story = require('../models');
+const models = require('../models');
+
+const { Story } = models;
 
 const {
   GraphQLObjectType,

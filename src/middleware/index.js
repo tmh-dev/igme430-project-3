@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const secret = 'mysecretshhhh';
+const secret = process.env.JWT_SECRET || 'mysecretshhhh';
 
 const requiresLogin = (req, res, next) => {
   if (!req.session.account) {
@@ -12,7 +12,7 @@ const requiresLogin = (req, res, next) => {
 
 const requiresToken = (req, res, next) => {
   let token = req.headers['x-access-token'] || req.headers.authorization;
-  if (token.startWith('Bearer ')) {
+  if (token.startsWith('Bearer ')) {
     // Remove bearer from string
     token = token.slice(7, token.length);
   }
@@ -38,7 +38,7 @@ const requiresToken = (req, res, next) => {
 
 const requiresLogout = (req, res, next) => {
   if (req.session.account) {
-    return res.redirect('/storyboard');
+    return res.redirect('/home');
   }
 
   return next();

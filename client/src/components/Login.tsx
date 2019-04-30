@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { userActions } from '../../redux/actions/user.actions';
+import { userActions } from '../redux/actions/user.actions';
 
 export interface IState {
     email: string;
@@ -15,9 +15,6 @@ class Login extends React.Component<any, IState> {
 
     constructor(props: any) {
         super(props);
-
-        // reset login status 
-        this.props.dispatch(userActions.logout());
     }
 
     private handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {

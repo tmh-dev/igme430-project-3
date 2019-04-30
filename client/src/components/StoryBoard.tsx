@@ -1,42 +1,16 @@
 import * as React from "react";
-import axios from 'axios';
-import StoryForm from "./StoryForm";
+import { Query } from 'react-apollo';
+
+import AddStory from "./AddStory";
 import Story from './Story';
 
-export interface IProps {
-    _csrf: string;
-}
+import { GET_BOARD_QUERY } from '../queries';
 
-export interface IState {
-    stories: any[]
-}
-
-export default class StoryBoard extends React.Component<IProps, IState> {
-    state: IState = {
-        stories: [],
-    };
-
-    componentDidMount() {
-        this.getStories();
+export default class StoryBoard extends React.Component<any> {
+    state = {
+        refresh: false,
     }
-
-    private getStories = async (): Promise<any> => {
-        try {
-            const response = await axios({
-                method: 'get',
-                url: '/api/getStories',
-                headers: {
-                    'Accept':'application/json'
-                }
-            });
-            this.setState({stories: response.data.stories});
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    private createGroup = () => {
-        const { stories } = this.state;
+    private createGroup = (stories: any) => {
         // if no cards are passed down
         if (!stories) {
             return <div>No Stories Made</div>;
@@ -50,8 +24,8 @@ export default class StoryBoard extends React.Component<IProps, IState> {
             let cols = [];
             // inner loop to create cols 
             for (let j: number = 0; stories.length > 0 && i < 4; j++) {
-                const { title, status, description } = stories.shift();
-                cols.push(<Story title={title} status={status} description={description} getStories={this.getStories} _csrf={this.props._csrf}/>);
+                const { title, status, description, id } = stories.shift();
+                cols.push(<Story refresh={this.refresh}title={title} status={"test"} description={description} id={id}/>);
             }
             // create row and add cols
             group.push(<div className="row">{ cols }</div>);
@@ -60,23 +34,25 @@ export default class StoryBoard extends React.Component<IProps, IState> {
         return group;
     }
 
+    private refresh = () => {
+        this.setState({refresh: !this.state.refresh});
+    }
+
     public render() {
-        const { _csrf } = this.props;
+        const { boardId } = this.props.location.state;
+
         return (
-            <div className="container">
-                <div className="row">
-                    {/* <BoardCategory title="ICE BOX" handleDragOver={this.handleDragOver} handleDrop={this.handleDrop} stories={stories} />
-                    <BoardCategory title="EMERGENCY" handleDragOver={this.handleDragOver} handleDrop={this.handleDrop} stories={stories} />
-                    <BoardCategory title="IN PROGRESS" handleDragOver={this.handleDragOver} handleDrop={this.handleDrop}/>
-                    <BoardCategory title="TESTING" handleDragOver={this.handleDragOver} handleDrop={this.handleDrop}/>
-                    <BoardCategory title="COMPLETE" handleDragOver={this.handleDragOver} handleDrop={this.handleDrop}/> */}
+            <div>
+                <AddStory refresh={this.refresh} boardId={boardId} />
+                <div className="container">
+                    <Query query={GET_BOARD_QUERY} variables={{ boardId }}>
+                        {({loading, error, data}) => {
+                            if (loading) return "Loading...";
+                            if (error) return `Error! ${error.message}`;
+                            return this.createGroup(data.board.stories);
+                        }}
+                    </Query>
                 </div>
-
-                <div className="row">
-                    <StoryForm _csrf={ _csrf } getStories={this.getStories}/>
-                </div>
-
-                {this.createGroup()}
             </div>
         );
     }

@@ -13,6 +13,7 @@ const StoryType = new GraphQLObjectType({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
     description: { type: GraphQLString },
+    boardId: { type: GraphQLID },
     board: {
       type: require('./Board'),
       resolve(parent, args) {

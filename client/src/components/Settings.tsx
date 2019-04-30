@@ -1,18 +1,13 @@
 import * as React from 'react';
 import axios from 'axios';
-import { stringify } from 'query-string';
-import { Route, Redirect } from 'react-router-dom';
-
-export interface IProps {
-    _csrf: string;
-}
+import { stringify } from 'query-string'
 
 export interface IState {
     password1: string,
     password2: string,
 }
 
-export default class Login extends React.Component<IProps, IState> {
+export default class Login extends React.Component<{}, IState> {
     state: IState = {
         password1: '',
         password2: '',
@@ -32,7 +27,6 @@ export default class Login extends React.Component<IProps, IState> {
     private handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<any> => {
         e.preventDefault();
         const { password1, password2 } = this.state;
-        const { _csrf } = this.props;
         
         if (!password1 || !password2) {
             console.log("All fields are required");
@@ -41,11 +35,12 @@ export default class Login extends React.Component<IProps, IState> {
         if (password1 !== password2) {
             console.log("Passwords must match");
         }
+        const user = JSON.parse(localStorage.getItem('user'));
 
         const data = {
             pass1: password1,
             pass2: password2,
-            _csrf,
+            id: user.id,
         };
 
         try {
@@ -54,7 +49,8 @@ export default class Login extends React.Component<IProps, IState> {
                 url: '/api/changePassword',
                 data: stringify(data),
                 headers: {
-                    'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'
+                    'Content-Type':'application/x-www-form-urlencoded;charset=utf-8',
+                    'authorization': `Bearer ${user.token}`,
                 },
             });
             console.log(response);
@@ -64,7 +60,6 @@ export default class Login extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const { _csrf } = this.props;
         const { password1, password2 } = this.state;
 
         return (
@@ -81,7 +76,6 @@ export default class Login extends React.Component<IProps, IState> {
                             <input type="password" className="form-control" id="inputPassword2" placeholder="Confirm New Password" 
                             onChange={ this.handleOnChange } value={ password2 } />
                         </div>
-                        <input type="hidden" name="_csrf" value={ _csrf }/>
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </form>
             </div>

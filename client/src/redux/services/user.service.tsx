@@ -23,6 +23,7 @@ const signup = async (email: string, password1: string, password2: string) => {
         });
         user = {
             email,
+            id: response.data.id,
             token: response.data.token
         }
         // add user to local storage to sign in
@@ -53,6 +54,7 @@ const login = async (email: string, password: string) => {
         });
         user = {
             email,
+            id: response.data.id,
             token: response.data.token
         }
         // add user to local storage to sign in

@@ -5,18 +5,17 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const mongoose = require('mongoose');
-// const graphql = require('graphql');
 const graphqlHTTP = require('express-graphql');
 const schema = require('./graphql/index');
 
 // import required files
 const router = require('./router');
+// const middleware = require('./middleware');
+
+// const { requiresToken } = middleware;
 
 // set the port of the server
 const PORT = process.env.PORT || process.env.NODE_PORT || 8080;
-
-// set the JWT secret for the app
-// const JWT_TOKEN = process.env.JWT_TOKEN || 'mysecretshhhh';
 
 // set the URI for connecting to database
 const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/project2';

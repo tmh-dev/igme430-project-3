@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { userActions } from '../../redux/actions';
+import { userActions } from '../redux/actions';
 
 export interface IState {
     email: string;

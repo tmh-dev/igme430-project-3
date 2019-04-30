@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 
 
 // import components
-import { Home } from './Home';
+import { Landing } from './Landing';
 import { Pricing } from './Pricing';
-import { Login } from './account/Login';
-import { Signup } from './account/Signup';
+import { Login } from './Login';
+import { Signup } from './Signup';
 import { Navbar } from './Navbar';
 import StoryBoard from './StoryBoard';
 import Settings from './Settings';
+import UserPage from './UserPage';
 
 // import redux functionality
 import { history } from '../redux/helpers';
@@ -36,8 +37,9 @@ class App extends React.Component<any> {
             <Router history={history}>
                 <Navbar />
                 <div>
-                    <Route exact path="/" component={Home} />
+                    <Route exact path="/" component={Landing} />
                     <Route path="/pricing" component={Pricing} />
+                    <PrivateRoute path="/home" component={UserPage} />
                     <PublicOnlyRoute path="/login" component={Login} />
                     <PublicOnlyRoute path="/signup" component={Signup} />
                     <PrivateRoute path="/storyboard" component={StoryBoard} />

@@ -30,7 +30,9 @@ export const authentication = (state = initialState, action: any) => {
         case userConstants.LOGIN_FAILURE:
             return {};
         case userConstants.LOGOUT:
-            return {};
+            return {
+                loggedIn: false,
+            };
         default:
             return state;
     }

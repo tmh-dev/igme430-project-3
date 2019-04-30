@@ -4,12 +4,17 @@ import { connect } from 'react-redux';
 import { userActions } from '../redux/actions';
 
 class Navbar extends React.Component<any> {
+    state = {
+        toggle: false,
+    };
+
     constructor(props: any) {
         super(props);
     }
 
     logout = () => {
         this.props.dispatch(userActions.logout());
+        this.setState({toggle: !this.state.toggle});
     }
 
     conditionalDisplay = () => {
@@ -17,7 +22,7 @@ class Navbar extends React.Component<any> {
         if (localStorage.getItem('user')) {
             jsxElements.push(
                 <li className="nav-item">
-                    <Link className="nav-link" to="/storyboard">StoryBoard</Link>
+                    <Link className="nav-link" to="/home">App</Link>
                 </li>,
                 <li className="nav-item">
                     <Link className="nav-link" to="/settings">Settings</Link>
@@ -66,10 +71,10 @@ class Navbar extends React.Component<any> {
 }
 
 const mapStateToProps = (state: any) => {
-    // const { loggingIn } = state.authentication;
-    // return {
-    //     loggingIn,
-    // };
+    const { loggedIn } = state.authentication;
+    return {
+        loggedIn,
+    };
 };
 
 const connectedNavbar = connect(mapStateToProps)(Navbar);

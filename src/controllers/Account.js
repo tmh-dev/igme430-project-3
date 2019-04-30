@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const models = require('../models');
 
-const secret = 'mysecretshhhh';
+const secret = process.env.JWT_SECRET || 'mysecretshhhh';
 
 const { Account } = models;
 
@@ -26,6 +26,7 @@ const login = (request, response) => {
       });
     }
 
+    const accountId = Account.AccountModel.toAPI(account)._id;
     const payload = { email };
     const token = jwt.sign(payload, secret, {
       expiresIn: '1h',
@@ -34,6 +35,8 @@ const login = (request, response) => {
     return res.status(200).json({
       success: true,
       messsage: 'Authentication Successful',
+      email,
+      id: accountId,
       token,
     });
   });
@@ -71,9 +74,11 @@ const signup = (request, response) => {
     const account = new Account.AccountModel(accountData);
 
     try {
-      const newAccount = await account.save();
+      await account.save();
 
-      const payload = Account.AccountModel.toAPI(newAccount);
+      const accountId = Account.AccountModel.toAPI(account)._id;
+
+      const payload = { email: req.body.email };
       const token = jwt.sign(payload, secret, {
         expiresIn: '1h',
       });
@@ -81,6 +86,7 @@ const signup = (request, response) => {
         success: true,
         messsage: 'Authentication Successful',
         email: accountData.email,
+        id: accountId,
         token,
       });
     } catch (err) {
@@ -103,7 +109,7 @@ const changePassword = (request, response) => {
 
   req.body.pass1 = `${req.body.pass1}`;
   req.body.pass2 = `${req.body.pass2}`;
-
+  req.body.id = `${req.body.id}`;
 
   if (!req.body.pass1 || !req.body.pass2) {
     return res.status(400).json({
@@ -122,15 +128,8 @@ const changePassword = (request, response) => {
       password: hash,
       salt,
     };
-
-    Account.AccountModel.changePassword(req.session.account.email, update, (err, doc) => {
-      if (err) {
-        console.log(err);
-        return res.status(400).json({ error: 'An error occured' });
-      }
-
-      return res.json({ message: `Password was updated for account with email ${doc.email}` });
-    });
+    
+    Account.AccountModel.findByIdAndUpdate(req.body.id, update);
   });
 };
 

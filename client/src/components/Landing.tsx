@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const Home = () => {
+export const Landing = () => {
     return (
         <div className="container">
             <div className="jumbotron">

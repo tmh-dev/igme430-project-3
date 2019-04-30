@@ -16,7 +16,7 @@ const signup = (email: string, password1: string, password2: string) => {
             .then(
                 user => {
                     dispatch(success(user));
-                    history.push('/');
+                    history.push('/home');
                 },
                 error => {
                     dispatch(failure(error));
@@ -39,7 +39,7 @@ const login = (email: string, password: string) => {
             .then(
                 user => {
                     dispatch(success(user));
-                    history.push('/');
+                    history.push('/home');
                 },
                 error => {
                     dispatch(failure(error));
@@ -50,8 +50,11 @@ const login = (email: string, password: string) => {
 }
 
 const logout = () => {
-    userService.logout();
-    return { type: userConstants.LOGOUT };
+    return (dispatch: any) => {
+        userService.logout();
+        dispatch( {type: userConstants.LOGOUT });
+        history.push('/');
+    };
 }
 
 export const userActions = {
